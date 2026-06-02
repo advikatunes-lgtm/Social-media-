@@ -1,0 +1,6 @@
+{
+  "name": "Caveman Social",
+  "description": "An agency-grade social media scheduling and automation platform designed to compose, schedule, and execute automated browser posting with visual timelines, detailed custom diagnostics, and AI assistant integrations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

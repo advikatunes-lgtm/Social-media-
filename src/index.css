@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", sans-serif;
+  --font-mono: "Fira Code", monospace;
+}
+
+@layer utilities {
+  /* Dynamic fade in transition and layout elements */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Custom clip path utilities */
+  .clip-path-top {
+    clip-path: inset(0 0 50% 0);
+  }
+}
+
+/* Master Print Stylesheet: Tailored for standard A4 Brand Manual compilation */
+@media print {
+  body {
+    background: white !important;
+    color: #0b0f19 !important;
+    font-size: 12pt;
+    line-height: 1.5;
+  }
+
+  /* Hide screen-specific controls and sidebar workspaces */
+  .print\:hidden,
+  #brand-form-container,
+  #brand-vault,
+  header,
+  footer,
+  aside,
+  button,
+  .print-hide {
+    display: none !important;
+  }
+
+  /* Expand the dashboard to full width of the A4 page */
+  #brand-details-panel,
+  #brand-dashboard-root,
+  .lg\:col-span-8 {
+    width: 100% !important;
+    max-width: 100% !important;
+    float: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Page break rules for manual formatting */
+  .print\:space-y-12 > div,
+  .print\:space-y-16 > div {
+    page-break-after: always;
+    page-break-inside: avoid;
+    break-after: page;
+  }
+
+  /* Reset all card borders to prevent double margin printing */
+  .bg-white,
+  .bg-slate-900,
+  .border {
+    border: none !important;
+    background: transparent !important;
+    color: #111827 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+
+  h1, h2, h3, h4, h5 {
+    color: #000000 !important;
+    page-break-inside: avoid;
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  img, svg {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}
