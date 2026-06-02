@@ -2,28 +2,29 @@ import "dotenv/config";
 import express from "express";
 import path from "path";
 import fs from "fs";
-import { fileURLToPath } from "url";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import { Platform, PostStatus, Role, PlanType } from "./src/types.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Initialize Gemini Client
-const apiKey = process.env.GEMINI_API_KEY;
-if (!apiKey) {
-  console.warn("WARNING: GEMINI_API_KEY is not defined in environment variables. Gemini features might fail.");
+// Lazy Initialize Gemini Client
+let aiClient: GoogleGenAI | null = null;
+function getAIClient() {
+  if (!aiClient) {
+    const key = process.env.GEMINI_API_KEY;
+    if (!key) {
+      throw new Error("GEMINI_API_KEY environment variable is required");
+    }
+    aiClient = new GoogleGenAI({
+      apiKey: key,
+      httpOptions: {
+        headers: {
+          "User-Agent": "aistudio-build",
+        },
+      },
+    });
+  }
+  return aiClient;
 }
-
-const ai = new GoogleGenAI({
-  apiKey: apiKey || "",
-  httpOptions: {
-    headers: {
-      "User-Agent": "aistudio-build",
-    },
-  },
-});
 
 // JSON File Database path
 const DB_PATH = path.join(process.cwd(), "db.json");
@@ -607,7 +608,7 @@ Tailor specifically for platform constraint limits:
 
       const promptString = `Transform, extend, or generate matching content for this input: "${prompt}". Let your primal magic flow! Defend clean visual spacing.`;
 
-      const response = await ai.models.generateContent({
+      const response = await getAIClient().models.generateContent({
         model: "gemini-3.5-flash",
         contents: promptString,
         config: {
